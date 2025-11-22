@@ -1,0 +1,14 @@
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+
+parameters:
+  paths:
+    - app
+    - database
+    - config
+  level: 8
+  excludePaths:
+    - %rootDir%/../../../*/node_modules/*
+  ignoreErrors:
+    -
+      identifier: missingType.iterableValue

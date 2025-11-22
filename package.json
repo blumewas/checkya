@@ -1,0 +1,35 @@
+{
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:astro": "astro build",
+    "docs": "astro dev"
+  },
+  "dependencies": {
+    "@redocly/cli": "^2.2.2",
+    "axios": "^1.10.0"
+  },
+  "devDependencies": {
+    "@astrojs/starlight": "^0.36.0",
+    "@eslint/js": "^9.36.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "astro": "^5.14.1",
+    "astro-mermaid": "^1.0.4",
+    "eslint": "^9.36.0",
+    "globals": "^16.4.0",
+    "laravel-vite-plugin": "^2.0.1",
+    "mermaid": "^11.12.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-blade": "^2.1.21",
+    "sharp": "^0.34.4",
+    "stylelint": "^16.24.0",
+    "stylelint-prettier": "^5.0.3",
+    "tailwindcss": "^4.1.13",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.44.1",
+    "vite": "^7.1.7",
+    "vite-bundle-analyzer": "^1.2.3"
+  }
+}

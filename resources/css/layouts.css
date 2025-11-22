@@ -1,0 +1,9 @@
+html {
+  scroll-padding-top: 5rem;
+}
+
+@media (min-width: theme(--breakpoint-lg)) {
+  html {
+    scroll-padding-top: 1rem;
+  }
+}

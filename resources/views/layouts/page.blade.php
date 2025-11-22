@@ -15,7 +15,7 @@
 @endpush
 
 @push('scripts')
-  @vite(['resources/js/apps/sample-app/sample-app.tsx'])
+  @vite(['resources/js/index.ts'])
 @endpush
 
 @section('body')

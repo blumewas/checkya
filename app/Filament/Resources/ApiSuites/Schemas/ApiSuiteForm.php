@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\ApiSuites\Schemas;
 
+use App\Enums\ApiSuiteStatusEnum;
 use App\Services\YamlConfigService;
 use Closure;
 use Filament\Forms\Components\CodeEditor;
 use Filament\Forms\Components\CodeEditor\Enums\Language;
 use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
@@ -16,6 +18,12 @@ class ApiSuiteForm
     {
         return $schema
             ->components([
+                Select::make('status')
+                    ->enum(ApiSuiteStatusEnum::class)
+                    ->options(ApiSuiteStatusEnum::class)
+                    ->default(ApiSuiteStatusEnum::Disabled)
+                    ->required(),
+
                 TextInput::make('name')
                     ->label(__('filament/api_suites.name'))
                     ->required()
@@ -37,7 +45,9 @@ class ApiSuiteForm
                             $yamlService = resolve(YamlConfigService::class);
 
                             if (($error = $yamlService->validate($value)) !== true) {
-                                $fail($error->__toString());
+                                $msg = $error === false ? 'Error while validating' : $error->__toString();
+
+                                $fail($msg);
                             }
                         },
                     ])

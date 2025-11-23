@@ -2,10 +2,13 @@
 
 namespace App\Filament\Resources\ApiSuites\Tables;
 
+use App\Enums\ApiSuiteStatusEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -17,9 +20,14 @@ class ApiSuitesTable
             ->columns([
                 TextColumn::make('name'),
 
+                IconColumn::make('status')
+                    ->tooltip(fn (ApiSuiteStatusEnum $state) => $state->value)
+                    ->icon(fn (ApiSuiteStatusEnum $state): Heroicon => $state->getIcon()),
+
                 TextColumn::make('cron_schedule'),
 
-                // TODO: count for requests
+                TextColumn::make('request_count')
+                    ->numeric(),
             ])
             ->filters([])
             ->recordActions([ViewAction::make(), EditAction::make()])

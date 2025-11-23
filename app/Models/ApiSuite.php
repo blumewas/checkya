@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ApiSuiteStatusEnum;
 use App\Services\YamlConfigService;
 use Carbon\CarbonImmutable;
 use Database\Factories\ApiSuiteFactory;
@@ -36,6 +37,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property mixed $client_config
  * @property mixed $parsed
  * @property mixed $requests
+ * @property ApiSuiteStatusEnum $status
+ * @property mixed $request_count
+ *
+ * @method static Builder<static>|ApiSuite whereStatus($value)
  *
  * @mixin \Eloquent
  */
@@ -52,6 +57,7 @@ class ApiSuite extends Model
     /** {@inheritDoc} */
     protected $casts = [
         'secrets' => 'encrypted:array',
+        'status' => ApiSuiteStatusEnum::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -62,6 +68,14 @@ class ApiSuite extends Model
     protected function requests(): Attribute
     {
         return Attribute::make(get: fn () => $this->parsed['requests']);
+    }
+
+    /**
+     * @return Attribute<int, never>
+     */
+    protected function requestCount(): Attribute
+    {
+        return Attribute::make(get: fn () => count($this->requests ?? []));
     }
 
     /**

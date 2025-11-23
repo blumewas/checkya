@@ -24,12 +24,12 @@ class YamlConfigService
         $validator = new Validator;
 
         // Convert PHP array to stdClass structure (required by Opis)
-        $data = json_decode(json_encode($config));
+        $data = json_decode(json_encode($config) ?: '{}');
 
         /** @var ValidationResult $result */
         $result = $validator->validate($data, $this->getJsonSchema());
 
-        return $result->isValid() ? true : $result->error();
+        return $result->isValid() ? true : $result->error() ?? false;
     }
 
     /**

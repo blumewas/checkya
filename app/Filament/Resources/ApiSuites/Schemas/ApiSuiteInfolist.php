@@ -2,10 +2,14 @@
 
 namespace App\Filament\Resources\ApiSuites\Schemas;
 
+use App\Enums\ApiSuiteStatusEnum;
 use Filament\Infolists\Components\CodeEntry;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Phiki\Grammar\Grammar;
 
 class ApiSuiteInfolist
@@ -14,9 +18,18 @@ class ApiSuiteInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name'),
+                Section::make('Info')
+                    ->childComponents([TextEntry::make('name')]),
 
-                TextEntry::make('cron_schedule'),
+                Section::make('Status')
+                    ->inlineLabel()
+                    ->childComponents([
+                        IconEntry::make('status')
+                            ->tooltip(fn (ApiSuiteStatusEnum $state) => $state->value)
+                            ->icon(fn (ApiSuiteStatusEnum $state): Heroicon => $state->getIcon()),
+
+                        TextEntry::make('cron_schedule'),
+                    ]),
 
                 CodeEntry::make('config')
                     ->grammar(Grammar::Yaml)

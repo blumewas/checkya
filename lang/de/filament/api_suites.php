@@ -7,4 +7,6 @@ return [
     'cron_schedule' => 'Cron-Zeitplan',
     'config' => 'Konfiguration',
     'secrets' => 'Secrets',
+    'request_count' => 'Anfragen',
+    'status' => 'Status',
 ];

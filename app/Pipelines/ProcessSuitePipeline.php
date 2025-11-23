@@ -2,6 +2,7 @@
 
 namespace App\Pipelines;
 
+use App\Enums\ApiSuiteStatusEnum;
 use App\Models\ApiSuite;
 use App\Pipelines\ProcessSuite\SendApiRequest;
 use Illuminate\Http\Client\Factory as HttpFactory;
@@ -10,6 +11,8 @@ use Throwable;
 
 class ProcessSuitePipeline extends Pipeline
 {
+    private ApiSuite $apiSuite;
+
     public static function run(ApiSuite $apiSuite): array
     {
         $client = app(HttpFactory::class)
@@ -33,10 +36,18 @@ class ProcessSuitePipeline extends Pipeline
         ];
 
         return app(static::class)
+            ->setSuite($apiSuite)
             ->through([...$requestSteps])
             // TODO: add pipe to notify/process after
             ->send($memorized)
             ->thenReturn();
+    }
+
+    public function setSuite(ApiSuite $apiSuite): self
+    {
+        $this->apiSuite = $apiSuite;
+
+        return $this;
     }
 
     /**
@@ -50,6 +61,10 @@ class ProcessSuitePipeline extends Pipeline
      */
     protected function handleException($passable, Throwable $e)
     {
+        $this->apiSuite->update([
+            'status' => ApiSuiteStatusEnum::Error,
+        ]);
+
         // TODO: notify
         throw $e;
     }

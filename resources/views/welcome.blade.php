@@ -1,5 +1,9 @@
 @extends('frontend::layouts.page')
 
-@section('content')
-  <div id="sample-app"></div>
+@section('title', 'Welcome')
+
+@section('main')
+  <div id="sample-app">
+    Hello
+  </div>
 @endsection

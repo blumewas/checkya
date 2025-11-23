@@ -1,0 +1,11 @@
+{
+    "license": "UNLICENSED",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "start": "node ./example-app.js"
+    },
+    "dependencies": {
+        "express": "^5.1.0"
+    }
+}

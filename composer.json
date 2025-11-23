@@ -15,7 +15,9 @@
         "chiiya/laravel-utilities": "^5.3",
         "filament/filament": "^4.0",
         "laravel/framework": "^12.0",
-        "sentry/sentry-laravel": "^4.15"
+        "phiki/phiki": "^2.0",
+        "sentry/sentry-laravel": "^4.15",
+        "symfony/yaml": "^7.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.16",

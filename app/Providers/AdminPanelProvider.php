@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Filament\Resources\ApiSuites\ApiSuiteResource;
 use Chiiya\FilamentAccessControl\FilamentAccessControlPlugin;
 use Chiiya\FilamentAccessControl\Http\Middleware\EnsureAccountIsNotExpired;
 use Filament\Http\Middleware\Authenticate;
@@ -43,7 +44,7 @@ final class AdminPanelProvider extends PanelProvider
                     950 => '#410112',
                 ],
             ])
-            ->resources([])
+            ->resources([ApiSuiteResource::class])
             ->pages([Dashboard::class])
             ->widgets([AccountWidget::class])
             ->middleware([

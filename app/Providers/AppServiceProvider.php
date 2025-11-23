@@ -8,6 +8,7 @@ use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Telescope\TelescopeServiceProvider as LaravelTelescopeServiceProvider;
@@ -16,10 +17,10 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        if ($this->app->isLocal()) {
-            $this->app->register(LaravelTelescopeServiceProvider::class);
-            $this->app->register(TelescopeServiceProvider::class);
-        }
+        // if ($this->app->isLocal()) {
+        //     $this->app->register(LaravelTelescopeServiceProvider::class);
+        //     $this->app->register(TelescopeServiceProvider::class);
+        // }
     }
 
     public function boot(): void
@@ -27,6 +28,7 @@ class AppServiceProvider extends ServiceProvider
         $this->configureModels();
         $this->configureCarbon();
         $this->configureVite();
+        $this->configureViewNamespaces();
         $this->configureProhibitDestructiveCommands();
 
         if (! $this->app->isLocal()) {
@@ -54,5 +56,10 @@ class AppServiceProvider extends ServiceProvider
     private function configureProhibitDestructiveCommands(): void
     {
         DB::prohibitDestructiveCommands(app()->isProduction());
+    }
+
+    private function configureViewNamespaces(): void
+    {
+        View::addNamespace('frontend', [resource_path('./views')]);
     }
 }

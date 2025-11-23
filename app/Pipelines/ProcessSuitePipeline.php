@@ -4,9 +4,13 @@ namespace App\Pipelines;
 
 use App\Enums\ApiSuiteStatusEnum;
 use App\Models\ApiSuite;
+use App\Notifications\ApiSuiteTestFailed;
 use App\Pipelines\ProcessSuite\SendApiRequest;
+use App\Pipelines\ProcessSuite\SendTestReport;
+use Chiiya\FilamentAccessControl\Models\FilamentUser;
 use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Pipeline\Pipeline;
+use Illuminate\Support\Facades\Log;
 use Throwable;
 
 class ProcessSuitePipeline extends Pipeline
@@ -37,8 +41,7 @@ class ProcessSuitePipeline extends Pipeline
 
         return app(static::class)
             ->setSuite($apiSuite)
-            ->through([...$requestSteps])
-            // TODO: add pipe to notify/process after
+            ->through([...$requestSteps, new SendTestReport($apiSuite)])
             ->send($memorized)
             ->thenReturn();
     }
@@ -65,7 +68,19 @@ class ProcessSuitePipeline extends Pipeline
             'status' => ApiSuiteStatusEnum::Error,
         ]);
 
-        // TODO: notify
-        throw $e;
+        Log::error('An error occured running test suite: '.$this->apiSuite->id, [
+            'error' => $e->getMessage(),
+        ]);
+
+        $user = FilamentUser::first();
+
+        $user?->notify(
+            new ApiSuiteTestFailed(
+                apiSuiteId: $this->apiSuite->id,
+                apiSuiteName: $this->apiSuite->name,
+                errorMessage: $e->getMessage(),
+            ),
+        );
+        // throw $e;
     }
 }

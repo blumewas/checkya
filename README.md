@@ -22,8 +22,6 @@
 
   <p align="center">
     <img src="https://www.vectorlogo.zone/logos/laravel/laravel-icon.svg" height="45" />
-    <img src="https://www.vectorlogo.zone/logos/tailwindcss/tailwindcss-icon.svg" height="45" />
-    <img src="https://www.vectorlogo.zone/logos/typescriptlang/typescriptlang-icon.svg" height="45" />
   </p>
 </div>
 <br />

@@ -31,6 +31,8 @@ readonly class SendApiRequest
                     return $carry;
                 }
 
+                // TODO: secrets?
+
                 // Get the value from memory
                 if (str_starts_with($value, 'memorized')) {
                     $jsonPath = explode('.', str_replace('memorized.', '', $value));

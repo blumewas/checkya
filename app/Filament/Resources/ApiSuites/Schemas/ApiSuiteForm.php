@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\ApiSuites\Schemas;
 
+use App\Services\YamlConfigService;
+use Closure;
 use Filament\Forms\Components\CodeEditor;
 use Filament\Forms\Components\CodeEditor\Enums\Language;
 use Filament\Forms\Components\KeyValue;
@@ -26,11 +28,19 @@ class ApiSuiteForm
                         'regex:/^((\*(\/\d+)?|\d+(-\d+)?(\/\d+)?)(,(\*(\/\d+)?|\d+(-\d+)?(\/\d+)?))*)(\s+((\*(\/\d+)?|\d+(-\d+)?(\/\d+)?)(,(\*(\/\d+)?|\d+(-\d+)?(\/\d+)?))*)){4}$/',
                     ),
 
-                // TODO: validate/only allowed methods
                 CodeEditor::make('config')
                     ->label(__('filament/api_suites.config'))
                     ->language(Language::Yaml)
                     ->required()
+                    ->rules([
+                        fn (): Closure => function (string $attribute, $value, Closure $fail): void {
+                            $yamlService = resolve(YamlConfigService::class);
+
+                            if (($error = $yamlService->validate($value)) !== true) {
+                                $fail($error->__toString());
+                            }
+                        },
+                    ])
                     ->columnSpanFull(),
 
                 KeyValue::make('secrets')

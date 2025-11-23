@@ -7,6 +7,7 @@ use App\Models\ApiSuite;
 use App\Pipelines\ProcessSuitePipeline;
 use Filament\Actions\Action;
 use Filament\Actions\EditAction;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ViewRecord;
 use Illuminate\Support\Facades\Log;
 
@@ -18,10 +19,17 @@ class ViewApiSuite extends ViewRecord
     {
         return [
             Action::make('testSuite')
+                ->label('Test')
+                ->link()
                 ->action(function (ApiSuite $record): void {
                     $result = ProcessSuitePipeline::run($record);
 
                     Log::info($result);
+
+                    Notification::make()
+                        ->title('Suite was tested successfully')
+                        ->success()
+                        ->send();
                 }),
             EditAction::make(),
         ];

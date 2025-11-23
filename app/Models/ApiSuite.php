@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\YamlConfigService;
 use Carbon\CarbonImmutable;
 use Database\Factories\ApiSuiteFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,7 +10,6 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * @property string $id
@@ -77,6 +77,6 @@ class ApiSuite extends Model
      */
     protected function parsed(): Attribute
     {
-        return Attribute::make(get: fn () => Yaml::parse($this->config));
+        return Attribute::make(get: fn () => resolve(YamlConfigService::class)->parse($this->config));
     }
 }

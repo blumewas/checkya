@@ -1,0 +1,145 @@
+{
+    "type": "object",
+    "required": [
+        "client",
+        "requests"
+    ],
+    "properties": {
+        "client": {
+            "type": "object",
+            "required": [
+                "baseUrl"
+            ],
+            "properties": {
+                "baseUrl": {
+                    "type": "string"
+                },
+                "accept": {
+                    "type": "string"
+                },
+                "withHeaders": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    }
+                }
+            },
+            "additionalProperties": false
+        },
+        "requests": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "url",
+                    "response"
+                ],
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "headers": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "name",
+                                "value"
+                            ],
+                            "properties": {
+                                "name": {
+                                    "type": "string"
+                                },
+                                "value": {
+                                    "type": "string"
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "response": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "required": [
+                                "action"
+                            ],
+                            "properties": {
+                                "action": {
+                                    "type": "string",
+                                    "enum": [
+                                        "memorize",
+                                        "assert"
+                                    ]
+                                },
+                                "key": {
+                                    "type": "string"
+                                },
+                                "expectations": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "method": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "status"
+                                                ]
+                                            },
+                                            "key": {
+                                                "type": "string"
+                                            },
+                                            "value": {}
+                                        },
+                                        "additionalProperties": false,
+                                        "oneOf": [
+                                            {
+                                                "required": [
+                                                    "method",
+                                                    "value"
+                                                ]
+                                            },
+                                            {
+                                                "required": [
+                                                    "key",
+                                                    "value"
+                                                ]
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            "additionalProperties": false,
+                            "oneOf": [
+                                {
+                                    "properties": {
+                                        "action": {
+                                            "const": "memorize"
+                                        }
+                                    },
+                                    "required": [
+                                        "action",
+                                        "key"
+                                    ]
+                                },
+                                {
+                                    "properties": {
+                                        "action": {
+                                            "const": "assert"
+                                        }
+                                    },
+                                    "required": [
+                                        "action",
+                                        "expectations"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false
+}

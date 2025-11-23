@@ -1,5 +1,3 @@
-[![mindtwo GmbH](https://www.mindtwo.de/downloads/doodles/github/repository-header.png)](https://www.mindtwo.de/)
-
 <div align="center">
   <p align="center">
     <img src="https://img.shields.io/github/check-runs/mindtwo/laravel-starter-kit/main">
@@ -7,11 +5,11 @@
   </p>
 
   <strong>
-    <h2 align="center">Laravel Starter Kit</h2>
+    <h2 align="center">checkya or Check your API</h2>
   </strong>
 
   <p align="center">
-    A Laravel 12 starter kit with Filament, Tailwind and Typescript
+    TODO
   </p>
 
   <p align="center">

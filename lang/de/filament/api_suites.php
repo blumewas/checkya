@@ -9,4 +9,8 @@ return [
     'secrets' => 'Secrets',
     'request_count' => 'Anfragen',
     'status' => 'Status',
+
+    'info_list' => [
+        'secret_key' => 'Secret Name',
+    ],
 ];

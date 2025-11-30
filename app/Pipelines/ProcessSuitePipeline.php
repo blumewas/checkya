@@ -2,13 +2,14 @@
 
 namespace App\Pipelines;
 
+use App\Data\TestResult;
 use App\Enums\ApiSuiteStatusEnum;
 use App\Models\ApiSuite;
 use App\Notifications\ApiSuiteTestFailed;
 use App\Pipelines\ProcessSuite\SendApiRequest;
 use App\Pipelines\ProcessSuite\SendTestReport;
+use App\Util\ApiSuiteClient;
 use Chiiya\FilamentAccessControl\Models\FilamentUser;
-use Illuminate\Http\Client\Factory as HttpFactory;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -17,27 +18,15 @@ class ProcessSuitePipeline extends Pipeline
 {
     private ApiSuite $apiSuite;
 
-    public static function run(ApiSuite $apiSuite): array
+    public static function run(ApiSuite $apiSuite): ?TestResult
     {
-        $client = app(HttpFactory::class)
-            ->createPendingRequest();
-
-        foreach ($apiSuite->client_config as $method => $value) {
-            $client->when(
-                method_exists($client, $method) && ! empty($value),
-                fn ($client) => $client->{$method}($value),
-            );
-        }
-
         $requestSteps = array_map(fn ($request): SendApiRequest => app(SendApiRequest::class, [
-            'client' => clone $client,
+            'client' => ApiSuiteClient::make($apiSuite),
+            'apiSuite' => $apiSuite,
             'request' => $request,
         ]), $apiSuite->requests);
 
-        $memorized = [
-            'memory' => [],
-            'expectations' => [],
-        ];
+        $memorized = new TestResult;
 
         return app(static::class)
             ->setSuite($apiSuite)
@@ -70,6 +59,7 @@ class ProcessSuitePipeline extends Pipeline
 
         Log::error('An error occured running test suite: '.$this->apiSuite->id, [
             'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
         ]);
 
         $user = FilamentUser::first();

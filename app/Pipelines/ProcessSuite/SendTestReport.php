@@ -2,6 +2,7 @@
 
 namespace App\Pipelines\ProcessSuite;
 
+use App\Data\TestResult;
 use App\Models\ApiSuite;
 use App\Notifications\ApiSuiteTestReport;
 use Chiiya\FilamentAccessControl\Models\FilamentUser;
@@ -13,7 +14,7 @@ readonly class SendTestReport
         protected ApiSuite $apiSuite,
     ) {}
 
-    public function handle(array $data, Closure $next): array
+    public function handle(TestResult $results, Closure $next): TestResult
     {
         $user = FilamentUser::first();
 
@@ -21,10 +22,10 @@ readonly class SendTestReport
             new ApiSuiteTestReport(
                 apiSuiteId: $this->apiSuite->id,
                 apiSuiteName: $this->apiSuite->name,
-                results: $data,
+                results: $results,
             ),
         );
 
-        return $next($data);
+        return $next($results);
     }
 }

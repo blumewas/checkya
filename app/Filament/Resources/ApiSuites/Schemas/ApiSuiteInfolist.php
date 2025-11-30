@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ApiSuites\Schemas;
 
 use App\Enums\ApiSuiteStatusEnum;
+use App\Models\ApiSuite;
 use Filament\Infolists\Components\CodeEntry;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\KeyValueEntry;
@@ -36,6 +37,8 @@ class ApiSuiteInfolist
                     ->columnSpanFull(),
 
                 KeyValueEntry::make('secrets')
+                    ->keyLabel(__('filament/api_suites.info_list.secret_key'))
+                    ->state(fn (ApiSuite $record) => collect($record->secrets)->map(fn () => '***')->toArray())
                     ->columnSpanFull(),
             ]);
     }

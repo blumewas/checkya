@@ -2,61 +2,31 @@
 
 namespace App\Pipelines\ProcessSuite;
 
+use App\Data\TestResult;
+use App\Models\ApiSuite;
+use App\Util\ApiSuiteClient;
 use Closure;
-use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use RuntimeException;
 
 readonly class SendApiRequest
 {
     public function __construct(
-        protected PendingRequest $client,
+        protected ApiSuiteClient $client,
+        protected ApiSuite $apiSuite,
         protected array $request,
     ) {}
 
-    public function handle(array $data, Closure $next): array
+    public function handle(TestResult $results, Closure $next): TestResult
     {
+        $this->client->configure($this->request, $results);
+
         // Get config
         $url = $this->request['url'];
         $method = $this->request['method'] ?? 'get';
 
-        // Get the headers
-        $headers = array_reduce(
-            $this->request['headers'] ?? [],
-            function ($carry, $header) use ($data) {
-                $name = $header['name'] ?? null;
-                $value = $header['value'] ?? null;
-
-                if (empty($name) || empty($value)) {
-                    return $carry;
-                }
-
-                // TODO: secrets?
-
-                // Get the value from memory
-                if (str_starts_with($value, 'memorized')) {
-                    $jsonPath = explode('.', str_replace('memorized.', '', $value));
-                    $value = $data['memory'];
-
-                    foreach ($jsonPath as $part) {
-                        $value = $value[$part] ?? null;
-
-                        if (empty($value)) {
-                            return $carry;
-                        }
-                    }
-                }
-
-                $carry[$name] = $value;
-
-                return $carry;
-            },
-            [],
-        );
-
         // Get response
         $response = $this->client
-            ->withHeaders($headers)
             ->send($method, $url);
 
         // Process response data
@@ -73,20 +43,18 @@ readonly class SendApiRequest
             unset($action['action']);
 
             // Run the action
-            $data = match ($actionName) {
-                'memorize' => $this->memorize($data, $responseData, ...$action),
-                'assert' => $this->assert($data, $response, ...$action),
+            $results = match ($actionName) {
+                'memorize' => $this->memorize($results, $responseData, ...$action),
+                'assert' => $this->assert($results, $response, ...$action),
                 default => throw new RuntimeException('Unknown action to perform on response result', 1),
             };
         }
 
-        return $next($data);
+        return $next($results);
     }
 
-    protected function assert(array $data, Response $response, array $expectations): array
+    protected function assert(TestResult $results, Response $response, array $expectations): TestResult
     {
-        $results = $data['expectations'] ?? [];
-
         foreach ($expectations as $expectation) {
             // Check whether we get a json key or a method
             $key = $expectation['key'] ?? null;
@@ -97,35 +65,35 @@ readonly class SendApiRequest
                 continue;
             }
 
-            $value = $expectation['value'] ?? null;
-            $expectationKey = sprintf('%s = %s', $key ?? $method, $value);
+            $expectedValue = $expectation['value'] ?? null;
+            $expectationKey = sprintf('%s = %s', $key ?? $method, $expectedValue);
 
-            // Get expectation result
-            $expectationResult = null;
+            // Get the value
+            $value = null;
 
             if (! empty($key)) {
-                $expectationResult = $response->json($key) === $value;
+                $value = $response->json($key);
             } elseif (! empty($method)) {
-                $expectationResult = $value === $response->{$method}();
+                $value = $response->{$method}();
             }
 
-            $results[$expectationKey] = $expectationResult;
+            // Get expectation result
+            $expectationResult = $value === $expectedValue;
+
+            $results->addExpectationResult($expectationKey, $value, $expectationResult);
         }
 
-        // Set expectations
-        $data['expectations'] = $results;
-
-        return $data;
+        return $results;
     }
 
-    protected function memorize(array $data, array $response, string $key): array
+    /**
+     * Memorize a value from response data.
+     */
+    protected function memorize(TestResult $results, array $response, string $key): TestResult
     {
         // Save the key from response data to memory
-        $memory = $data['memory'];
-        $memory[$key] = $response[$key];
+        $results->memorize($key, $response[$key]);
 
-        $data['memory'] = $memory;
-
-        return $data;
+        return $results;
     }
 }

@@ -10,7 +10,7 @@
 | {{ __('notifications.report.table.assertion') }} | {{ __('notifications.report.table.actual_value') }} | {{ __('notifications.report.table.result') }} |
 | --------- | ----- | -------- |
 @foreach ($expectations as $assertion => $result)
-| {{ $assertion }} | - | {{ $result ? __('notifications.report.table.success') : __('notifications.report.table.failed') }} |
+| {{ $assertion }} | {{ $result['actual'] ?? '-' }} | {{ ($result['result'] ?? false) ? __('notifications.report.table.success') : __('notifications.report.table.failed') }} |
 @endforeach
 </x-mail::table>
 @endempty

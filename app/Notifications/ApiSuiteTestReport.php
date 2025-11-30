@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Data\TestResult;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
@@ -16,7 +17,7 @@ class ApiSuiteTestReport extends Notification
     public function __construct(
         protected string $apiSuiteId,
         protected string $apiSuiteName,
-        protected array $results,
+        protected TestResult $results,
     ) {}
 
     /**
@@ -41,7 +42,7 @@ class ApiSuiteTestReport extends Notification
             ->markdown('notifications.test-report', [
                 'name' => $this->apiSuiteName,
                 'id' => $this->apiSuiteId,
-                'expectations' => $this->results['expectations'],
+                'expectations' => $this->results->expectationResult(),
             ]);
     }
 

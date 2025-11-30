@@ -15,7 +15,7 @@ return [
             'failed' => 'Failed',
             'success' => 'Success',
         ],
-        'thanks' => 'Thanks,',
+        'thanks' => 'Thanks for using the app,',
     ],
 
     'failed' => [

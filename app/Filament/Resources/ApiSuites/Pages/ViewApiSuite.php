@@ -24,7 +24,9 @@ class ViewApiSuite extends ViewRecord
                 ->action(function (ApiSuite $record): void {
                     $result = ProcessSuitePipeline::run($record);
 
-                    Log::info($result);
+                    Log::info(sprintf('Test results for api suite %d', $record->id), [
+                        'result' => $result,
+                    ]);
 
                     Notification::make()
                         ->title('Suite was tested successfully')

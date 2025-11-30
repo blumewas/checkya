@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use RuntimeException;
 
 /**
  * @property string $id
@@ -61,6 +62,21 @@ class ApiSuite extends Model
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
+
+    /**
+     * Get a secret value.
+     */
+    public function secretValue(string $key): mixed
+    {
+        $key = str_replace('secret.', '', $key);
+
+        $value = $this->secrets[$key] ?? null;
+
+        // TODO: custom exception
+        throw_if(! $value, new RuntimeException('Secret not found in memroy for $key'));
+
+        return $value;
+    }
 
     /**
      * @return Attribute<array, never>

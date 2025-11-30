@@ -20,7 +20,7 @@ RUN docker-php-ext-configure intl \
     && docker-php-ext-install intl zip pdo_mysql bcmath
 
 # ---- Build Composer Dependencies ----
-FROM php-fpm AS composer_builder
+FROM php-fpm AS intermediate-composer
 
 WORKDIR /app
 

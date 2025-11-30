@@ -1,13 +1,11 @@
 # ---- Build Composer Dependencies ----
-FROM php-fpm AS composer_builder
+FROM composer:2 AS composer_builder
 WORKDIR /app
 
-COPY ./ ./
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
-# Install latest composer release
-COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
-
-RUN composer install --no-dev
+COPY . .
 
 RUN php artisan vendor:publish --tag=laravel-assets --ansi --force
 

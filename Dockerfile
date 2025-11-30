@@ -15,7 +15,7 @@ RUN php artisan vendor:publish --tag=laravel-assets --ansi --force
 FROM php:8.4-fpm-alpine
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN apk update && apk install -y \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
@@ -34,6 +34,8 @@ COPY --from=composer_builder /app ./
 
 # Permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+USER www-data
 
 EXPOSE 9000
 CMD ["php-fpm"]

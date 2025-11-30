@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\ApiSuiteStatusEnum;
+use App\Enums\CronSchedules;
 use App\Services\YamlConfigService;
 use Carbon\CarbonImmutable;
 use Database\Factories\ApiSuiteFactory;
@@ -16,7 +17,7 @@ use RuntimeException;
 /**
  * @property string $id
  * @property string $name
- * @property string $cron_schedule
+ * @property CronSchedules $cron_schedule
  * @property string $config
  * @property array<array-key, mixed>|null $secrets
  * @property CarbonImmutable|null $created_at
@@ -59,6 +60,7 @@ class ApiSuite extends Model
     protected $casts = [
         'secrets' => 'encrypted:array',
         'status' => ApiSuiteStatusEnum::class,
+        'cron_schedule' => CronSchedules::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

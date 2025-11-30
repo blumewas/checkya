@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\ApiSuites\Schemas;
 
 use App\Enums\ApiSuiteStatusEnum;
+use App\Enums\CronSchedules;
 use App\Models\ApiSuite;
 use App\Services\YamlConfigService;
 use Closure;
@@ -30,12 +31,11 @@ class ApiSuiteForm
                     ->required()
                     ->maxLength(255),
 
-                TextInput::make('cron_schedule')
+                Select::make('cron_schedule')
+                    ->enum(CronSchedules::class)
+                    ->options(CronSchedules::class)
                     ->label(__('filament/api_suites.cron_schedule'))
-                    ->required()
-                    ->rule(
-                        'regex:/^((\*(\/\d+)?|\d+(-\d+)?(\/\d+)?)(,(\*(\/\d+)?|\d+(-\d+)?(\/\d+)?))*)(\s+((\*(\/\d+)?|\d+(-\d+)?(\/\d+)?)(,(\*(\/\d+)?|\d+(-\d+)?(\/\d+)?))*)){4}$/',
-                    ),
+                    ->required(),
 
                 CodeEditor::make('config')
                     ->label(__('filament/api_suites.config'))

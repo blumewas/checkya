@@ -31,7 +31,7 @@ COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 
 RUN composer install --no-dev
 
-RUN php artisan vendor:publish --tag=laravel-assets --ansi --force
+RUN php artisan filament:upgrade
 
 FROM node:22-alpine AS frontend-node
 LABEL stage=node

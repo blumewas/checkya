@@ -19,9 +19,18 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {})
     ->withSchedule(function (Schedule $schedule): void {
-        ApiSuite::query()
+
+        try {
+            $suites = ApiSuite::query()
             ->whereStatus(ApiSuiteStatusEnum::Active)
-            ->get()
+            ->get();
+        } catch (\Throwable $th) {
+            Log::error('Cant run schedules. Could not get api suites');
+
+            return;
+        }
+
+        $suites
             ->each(function (ApiSuite $apiSuite) use ($schedule): void {
                 $schedule->cron($apiSuite->cron_schedule)
                     ->call(function () use ($apiSuite): void {

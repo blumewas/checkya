@@ -12,26 +12,31 @@ RUN php artisan vendor:publish --tag=laravel-assets --ansi --force
 # ---- PHP Runtime ----
 FROM php:8.4-fpm-alpine
 
-# Install system dependencies
-RUN apk update && apk install -y \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
+# Install Alpine system dependencies
+RUN apk update && apk add --no-cache \
+    icu-dev \
     libzip-dev \
-    libicu-dev \
-    zip unzip \
+    unzip \
     zip \
-    curl \
+    oniguruma-dev \
     git \
-    && docker-php-ext-configure intl zip \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+    curl \
+    bash \
+    autoconf \
+    g++ \
+    make
+
+# Install PHP Extensions
+RUN docker-php-ext-configure intl \
+    && docker-php-ext-install intl zip pdo_mysql bcmath
 
 WORKDIR /var/www/html
 
+# Copy Laravel application from builder
 COPY --from=composer_builder /app ./
 
 # Permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chown -R www-data:www-data storage bootstrap/cache
 
 USER www-data
 

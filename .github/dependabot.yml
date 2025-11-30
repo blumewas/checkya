@@ -1,0 +1,49 @@
+# Dependabot config
+version: 2
+
+updates:
+  # Update composer dependencies
+  - package-ecosystem: "composer"
+    directory: "/"
+    registries:
+    - m2packagist
+    schedule:
+      interval: daily
+      time: "04:00"
+    open-pull-requests-limit: 10
+    groups:
+      composer-minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
+      composer-dev-minor-patch:
+        dependency-type: "development"
+        update-types:
+        - "minor"
+        - "patch"
+
+  # Enable npm update
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "04:00"
+    open-pull-requests-limit: 10
+    # Increase the minimum version for all npm dependencies
+    versioning-strategy: increase
+    groups:
+      npm-minor-patch:
+        update-types:
+        - "minor"
+        - "patch"
+      npm-dev-minor-patch:
+        dependency-type: "development"
+        update-types:
+        - "minor"
+        - "patch"
+
+  # Enable version updates for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"

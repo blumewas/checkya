@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ApiSuites\Pages;
 
+use App\Enums\ApiSuiteStatusEnum;
 use App\Filament\Resources\ApiSuites\ApiSuiteResource;
 use App\Models\ApiSuite;
 use App\Pipelines\ProcessSuitePipeline;
@@ -26,6 +27,10 @@ class ViewApiSuite extends ViewRecord
 
                     Log::info(sprintf('Test results for api suite %d', $record->id), [
                         'result' => $result,
+                    ]);
+
+                    $record->update([
+                        'status' => ApiSuiteStatusEnum::Active,
                     ]);
 
                     Notification::make()

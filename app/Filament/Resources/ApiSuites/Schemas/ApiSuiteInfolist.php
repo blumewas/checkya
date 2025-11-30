@@ -10,6 +10,7 @@ use Filament\Infolists\Components\KeyValueEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
 use Phiki\Grammar\Grammar;
 
@@ -27,7 +28,12 @@ class ApiSuiteInfolist
                     ->childComponents([
                         IconEntry::make('status')
                             ->tooltip(fn (ApiSuiteStatusEnum $state) => $state->value)
-                            ->icon(fn (ApiSuiteStatusEnum $state): Heroicon => $state->getIcon()),
+                            ->icon(fn (ApiSuiteStatusEnum $state): Heroicon => $state->getIcon())
+                            ->color(fn (ApiSuiteStatusEnum $state) => match ($state) {
+                                ApiSuiteStatusEnum::Active => Color::Emerald,
+                                ApiSuiteStatusEnum::Disabled => Color::Amber,
+                                ApiSuiteStatusEnum::Error => Color::Red,
+                            }),
 
                         TextEntry::make('cron_schedule'),
                     ]),

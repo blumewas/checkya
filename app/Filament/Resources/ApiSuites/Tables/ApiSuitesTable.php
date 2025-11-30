@@ -7,6 +7,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
@@ -22,7 +23,12 @@ class ApiSuitesTable
 
                 IconColumn::make('status')
                     ->tooltip(fn (ApiSuiteStatusEnum $state) => $state->value)
-                    ->icon(fn (ApiSuiteStatusEnum $state): Heroicon => $state->getIcon()),
+                    ->icon(fn (ApiSuiteStatusEnum $state): Heroicon => $state->getIcon())
+                    ->color(fn (ApiSuiteStatusEnum $state) => match ($state) {
+                        ApiSuiteStatusEnum::Active => Color::Emerald,
+                        ApiSuiteStatusEnum::Disabled => Color::Amber,
+                        ApiSuiteStatusEnum::Error => Color::Red,
+                    }),
 
                 TextColumn::make('cron_schedule'),
 

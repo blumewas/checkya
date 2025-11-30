@@ -1,5 +1,5 @@
 # ---- Build Composer Dependencies ----
-FROM composer:2 AS composer_builder
+FROM php-fpm AS composer_builder
 WORKDIR /app
 
 COPY ./ ./

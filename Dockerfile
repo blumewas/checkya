@@ -41,7 +41,7 @@ WORKDIR /app
 COPY --from=intermediate-composer /app /app
 
 # installs dependencies -> build
-RUN npm install && npm run prod && \
+RUN npm install && npm run build && \
     rm -f .npmrc && \
     rm -rf node_modules
 

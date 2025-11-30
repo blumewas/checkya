@@ -54,7 +54,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['daily', 'sentry'],
+            'channels' => explode(',', env('LOG_STACK_CHANNELS', 'daily,sentry')),
             'ignore_exceptions' => false,
         ],
 

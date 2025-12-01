@@ -56,3 +56,5 @@ WORKDIR /var/www/html
 COPY --from=frontend-node --chown=www-data:www-data /app /app
 
 USER www-data
+
+EXPOSE 9000

@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  laravel:
+  laravel-checkya:
     build:
       context: .
       dockerfile: Dockerfile
@@ -18,8 +18,6 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
     networks:
       - dokploy-network
-    expose:
-      - 9000
 
   nginx:
     image: nginx:alpine
@@ -29,7 +27,7 @@ services:
       - ./:/var/www/html:ro
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
-      - laravel
+      - laravel-checkya
     networks:
       - dokploy-network
 

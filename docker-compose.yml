@@ -41,11 +41,17 @@ services:
     #     context: .
     #   command: >
     #     sh -c "while true; do php artisan schedule:run --verbose --no-interaction; sleep 60; done"
-    #   volumes:
-    #     - .:/var/www/html
     #   depends_on:
-    #     - laravel
-    #     - db
+    #     - app
+
+    # queue:
+    #   build:
+    #     context: .
+    #   command: php artisan queue:work --tries=3
+    #   depends_on:
+    #     - app
+    #   networks:
+    #     - prod
 
 networks:
     dokploy-network:

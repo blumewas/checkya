@@ -56,6 +56,6 @@ LABEL stage=app
 
 WORKDIR /var/www/html
 
-COPY --from=frontend-node --chown=www-data:www-data /app /app
+COPY --from=frontend-node --chown=www-data:www-data /app /var/www/html
 
 USER www-data

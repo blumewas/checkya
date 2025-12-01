@@ -22,9 +22,9 @@ RUN docker-php-ext-configure intl \
 # ---- Build Composer Dependencies ----
 FROM php-fpm AS intermediate-composer
 
-WORKDIR /app
+WORKDIR /var/www/html
 
-COPY ./ ./
+COPY . .
 
 # Install latest composer release
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
@@ -39,9 +39,9 @@ RUN php artisan filament:upgrade
 FROM node:22-alpine AS frontend-node
 LABEL stage=node
 
-WORKDIR /app
+WORKDIR /var/www/html
 
-COPY --from=intermediate-composer /app /app
+COPY --from=intermediate-composer /var/www/html /var/www/html
 
 # installs dependencies -> build
 RUN npm install && npm run build && \
@@ -54,7 +54,7 @@ RUN npm install && npm run build && \
 FROM php-fpm AS app
 LABEL stage=app
 
-COPY --from=frontend-node --chown=www-data:www-data /app /var/www/html
+COPY --from=frontend-node --chown=www-data:www-data /var/www/html /var/www/html
 
 WORKDIR /var/www/html
 USER www-data

@@ -1,7 +1,7 @@
 # ------------------------------------------------------
 # 1) PHP-FPM BASE
 # ------------------------------------------------------
-FROM php:8.3-fpm-alpine AS php-base
+FROM php:8.4-fpm-alpine AS php-base
 
 RUN apk add --no-cache \
     icu-dev \

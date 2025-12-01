@@ -3,7 +3,7 @@
 # ------------------------------------------------------
 FROM php:8.4-fpm-alpine AS php-base
 
-RUN apk add --no-cache \
+RUN apk update && apk add --no-cache \
     icu-dev \
     libzip-dev \
     unzip \

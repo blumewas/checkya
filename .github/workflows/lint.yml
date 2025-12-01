@@ -1,4 +1,14 @@
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
 name: lint
 jobs:
   lint:

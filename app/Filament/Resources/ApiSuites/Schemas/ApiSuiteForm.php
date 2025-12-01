@@ -61,7 +61,7 @@ class ApiSuiteForm
                         $component->state(collect($state)->map(fn () => '')->toArray());
                     })
                     ->dehydrateStateUsing(function (array $state, ?ApiSuite $record): array {
-                        if (! $record) {
+                        if (! $record instanceof ApiSuite) {
                             return $state;
                         }
 
@@ -69,7 +69,7 @@ class ApiSuiteForm
                         $currentSecrets = $record->secrets;
 
                         return collect($state)->map(
-                            fn (?string $value, string $key) => ! empty($value) ? $value : $currentSecrets[$key] ?? null,
+                            fn (?string $value, string $key) => empty($value) ? $currentSecrets[$key] ?? null : $value,
                         )->toArray();
                     })
                     ->columnSpanFull(),

@@ -8,8 +8,8 @@ services:
             args:
                 - UID=${UID:-1000}
                 - GID=${GID:-1000}
-        # volumes:
-        # - .:/var/www/html:rw
+        volumes:
+            - ./:/var/www/html:rw
         environment:
             APP_ENV: production
             APP_URL: ${APP_URL}

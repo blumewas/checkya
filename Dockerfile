@@ -33,6 +33,9 @@ RUN composer install --no-dev
 
 RUN php artisan filament:upgrade
 
+###################################################################################
+# NPM Build.                                                                      #
+###################################################################################
 FROM node:22-alpine AS frontend-node
 LABEL stage=node
 
@@ -51,7 +54,7 @@ RUN npm install && npm run build && \
 FROM php-fpm AS app
 LABEL stage=app
 
-WORKDIR /var/www/html
+WORKDIR /app
 
 COPY --from=frontend-node --chown=www-data:www-data /app /app
 

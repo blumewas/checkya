@@ -54,7 +54,7 @@ RUN npm install && npm run build && \
 FROM php-fpm AS app
 LABEL stage=app
 
-WORKDIR /var/www/html
+WORKDIR /app
 
 COPY --from=frontend-node --chown=www-data:www-data /app /app
 

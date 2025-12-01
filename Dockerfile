@@ -1,8 +1,9 @@
-# Build PHP FPM BASE
-FROM php:8.4-fpm-alpine AS php-fpm
+# ------------------------------------------------------
+# 1) PHP-FPM BASE
+# ------------------------------------------------------
+FROM php:8.3-fpm-alpine AS php-base
 
-# Install Alpine system dependencies
-RUN apk update && apk add --no-cache \
+RUN apk add --no-cache \
     icu-dev \
     libzip-dev \
     unzip \
@@ -15,46 +16,47 @@ RUN apk update && apk add --no-cache \
     g++ \
     make
 
-# Install PHP Extensions
 RUN docker-php-ext-configure intl \
-    && docker-php-ext-install intl zip pdo_mysql bcmath
-
-# ---- Build Composer Dependencies ----
-FROM php-fpm AS intermediate-composer
+    && docker-php-ext-install intl zip pdo_mysql bcmath opcache
 
 WORKDIR /var/www/html
 
-COPY . .
 
-# Install latest composer release
+# ------------------------------------------------------
+# 2) Composer stage
+# ------------------------------------------------------
+FROM php-base AS composer-stage
+
 COPY --from=composer/composer:latest-bin /composer /usr/bin/composer
 
-RUN composer install --no-dev
+COPY . /var/www/html
+RUN composer install --no-dev --optimize-autoloader --no-progress --no-interaction
 
-RUN php artisan filament:upgrade
 
-###################################################################################
-# NPM Build.                                                                      #
-###################################################################################
-FROM node:22-alpine AS frontend-node
-LABEL stage=node
+# ------------------------------------------------------
+# 3) Node asset build
+# ------------------------------------------------------
+FROM node:22-alpine AS node-stage
 
-WORKDIR /var/www/html
+WORKDIR /build
+COPY . /build
 
-COPY --from=intermediate-composer /var/www/html /var/www/html
+RUN npm install && npm run build
 
-# installs dependencies -> build
-RUN npm install && npm run build && \
-    rm -f .npmrc && \
-    rm -rf node_modules
 
-###################################################################################
-# APP for AWS build                                                               #
-###################################################################################
-FROM php-fpm AS app
-LABEL stage=app
+# ------------------------------------------------------
+# 4) FINAL production image
+# ------------------------------------------------------
+FROM php-base AS app
 
-COPY --from=frontend-node --chown=www-data:www-data /var/www/html /var/www/html
+# copy PHP (vendor, app, etc.)
+COPY --from=composer-stage /var/www/html /var/www/html
 
-WORKDIR /var/www/html
+# copy built front-end assets
+COPY --from=node-stage /build/public /var/www/html/public
+
+RUN chown -R www-data:www-data /var/www/html
+
 USER www-data
+
+EXPOSE 9000

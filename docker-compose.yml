@@ -25,6 +25,8 @@ services:
             - MAIL_PASSWORD=${MAIL_PASSWORD}
             - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
             - MAIL_FROM_NAME="${APP_NAME}"
+        networks:
+            - dokploy-network
         expose:
             - 9000
         volumes:
@@ -40,6 +42,8 @@ services:
             - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
         depends_on:
             - app
+        networks:
+            - dokploy-network
 
     # scheduler:
     #   build:
@@ -57,5 +61,9 @@ services:
     #     - app
     #   networks:
     #     - prod
-# volumes:
-#     app_data:
+volumes:
+    app_data:
+
+networks:
+    dokploy-network:
+        external: true

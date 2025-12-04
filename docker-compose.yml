@@ -5,6 +5,7 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
+        image: checkya-app
         environment:
             - APP_ENV=${APP_ENV:-production}
             - APP_URL=http://localhost:9000
@@ -28,8 +29,8 @@ services:
             - dokploy-network
         expose:
             - 9000
-        volumes:
-            - .:/var/www/html
+        # volumes:
+        #     - .:/var/www/html
 
     nginx:
         image: nginx:alpine

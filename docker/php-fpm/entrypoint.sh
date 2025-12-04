@@ -23,6 +23,8 @@ php artisan event:cache
 php artisan route:cache
 php artisan view:cache
 php artisan config:cache
+php artisan icons:cache
 
+# Run the default command
 echo "✅ Laravel ready. Starting PHP-FPM..."
-exec php-fpm
+exec "$@"

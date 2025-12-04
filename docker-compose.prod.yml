@@ -1,9 +1,8 @@
 services:
     nginx:
-        image: nginx:alpine
-        # build:
-        #     context: .
-        #     dockerfile: ./docker/production/nginx/Dockerfile
+        build:
+            context: .
+            dockerfile: ./docker/production/nginx/Dockerfile
         restart: unless-stopped # Automatically restart unless the service is explicitly stopped
         volumes:
             # Mount the 'laravel-storage-production' volume to '/var/www/storage' inside the container.
@@ -14,7 +13,6 @@ services:
             # -----------------------------------------------------------
             - laravel-storage-production:/var/www/storage:ro
             - laravel-public-assets:/var/www/public/build:ro
-            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
         networks:
             - dokploy-network
         expose:

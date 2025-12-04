@@ -3,9 +3,6 @@ set -e
 
 echo "🔁 Running Laravel optimizations & migrations..."
 
-ls
-ls /var
-ls /var/www
 ls /var/www/html
 
 php artisan migrate --force

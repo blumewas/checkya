@@ -53,11 +53,9 @@ FROM php-base AS app
 
 # copy PHP (vendor, app, etc.)
 COPY --from=composer-stage /var/www/html /var/www/html
-RUN ls /var/www/html
 
 # copy built front-end assets
 COPY --from=node-stage /build/public /var/www/html/public
-RUN ls /var/www/html
 
 # Ensure permissions
 RUN chown -R www-data:www-data /var/www/html

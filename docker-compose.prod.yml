@@ -1,5 +1,5 @@
 services:
-    web:
+    nginx:
         image: nginx:alpine
         # build:
         #     context: .

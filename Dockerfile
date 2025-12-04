@@ -55,7 +55,7 @@ FROM php-base AS app
 COPY --from=composer-stage /var/www/html /var/www/html
 
 # copy built front-end assets
-# COPY --from=node-stage /build/public /var/www/html/public
+COPY --from=node-stage /build/public /var/www/html/public
 
 # Ensure permissions
 RUN chown -R www-data:www-data /var/www/html

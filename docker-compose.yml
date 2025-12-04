@@ -61,8 +61,8 @@ services:
     #     - app
     #   networks:
     #     - prod
-volumes:
-    app_data:
+# volumes:
+#     app_data:
 
 networks:
     dokploy-network:

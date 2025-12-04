@@ -6,17 +6,17 @@ services:
             context: .
             dockerfile: Dockerfile
         environment:
-            APP_ENV: ${APP_ENV:-production}
-            APP_URL: ${APP_URL}
-            APP_DEBUG: ${APP_DEBUG}
-            APP_KEY: ${APP_KEY}
-            LOG_CHANNEL: stack
-            LOG_STACK_CHANNELS: daily,stderr
-            DB_CONNECTION: ${DB_CONNECTION}
-            DB_HOST: ${DB_HOST}
-            DB_DATABASE: ${DB_DATABASE}
-            DB_USERNAME: ${DB_USERNAME}
-            DB_PASSWORD: ${DB_PASSWORD}
+            - APP_ENV=${APP_ENV:-production}
+            - APP_URL=${APP_URL}
+            - APP_DEBUG=${APP_DEBUG}
+            - APP_KEY=${APP_KEY}
+            - LOG_CHANNEL=stack
+            - LOG_STACK_CHANNELS=daily,stderr
+            - DB_CONNECTION=${DB_CONNECTION}
+            - DB_HOST=${DB_HOST}
+            - DB_DATABASE=${DB_DATABASE}
+            - DB_USERNAME=${DB_USERNAME}
+            - DB_PASSWORD=${DB_PASSWORD}
         networks:
             - dokploy-network
         expose:

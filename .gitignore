@@ -17,9 +17,14 @@
 /public/hot
 /public/docs
 /public/storage
-/public/css
-/public/js
 /public/vendor
+
+# Include for filament
+public/css/*
+!public/css/filament
+public/js/*
+!public/js/filament
+
 /storage/*.key
 /storage/pail
 /reports

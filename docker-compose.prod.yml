@@ -12,7 +12,7 @@ services:
             # The 'php-fpm' service mounts the same volume without ':ro' to allow write operations.
             # -----------------------------------------------------------
             - laravel-storage-production:/var/www/storage:ro
-            - laravel-public-assets:/var/www/public:ro
+            - laravel-public-assets:/var/www/public/build:ro
         networks:
             - dokploy-network
         expose:
@@ -29,7 +29,7 @@ services:
             target: production
         restart: unless-stopped
         volumes:
-            - laravel-public-assets:/var/www/public # Mount built public assets to ensure the manifest.json and hashed files match between Nginx and PHP-FPM
+            - laravel-public-assets:/var/www/public/build # Mount built public assets to ensure the manifest.json and hashed files match between Nginx and PHP-FPM
             - laravel-storage-production:/var/www/storage # Mount the storage volume
         env_file:
             - .env
@@ -42,11 +42,6 @@ services:
             retries: 3
 
 networks:
-    # Attach the service to the 'laravel' network.
-    # -----------------------------------------------------------
-    # This custom network allows all services within it to communicate using their service names as hostnames.
-    # For example, 'php-fpm' can connect to 'postgres' by using 'postgres' as the hostname.
-    # -----------------------------------------------------------
     dokploy-network:
         external: true
 

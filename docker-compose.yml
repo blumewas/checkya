@@ -29,7 +29,6 @@ services:
         expose:
             - 9000
         volumes:
-            - .:/var/www/html:rw
             - app_data:/var/www/html:rw
 
     nginx:

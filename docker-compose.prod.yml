@@ -31,8 +31,25 @@ services:
         volumes:
             - laravel-public-assets:/var/www/public/build # Mount built public assets to ensure the manifest.json and hashed files match between Nginx and PHP-FPM
             - laravel-storage-production:/var/www/storage # Mount the storage volume
-        env_file:
-            - .env
+        environment:
+            - APP_ENV=${APP_ENV:-production}
+            - APP_URL=${APP_URL}
+            - APP_DEBUG=${APP_DEBUG}
+            - APP_KEY=${APP_KEY}
+            - LOG_CHANNEL=stack
+            - LOG_STACK_CHANNELS=daily,stderr
+            - DB_CONNECTION=${DB_CONNECTION}
+            - DB_HOST=${DB_HOST}
+            - DB_DATABASE=${DB_DATABASE}
+            - DB_USERNAME=${DB_USERNAME}
+            - DB_PASSWORD=${DB_PASSWORD}
+            - MAIL_MAILER=${MAIL_MAILER:-smtp}
+            - MAIL_HOST=${MAIL_HOST}
+            - MAIL_PORT=${MAIL_PORT:-587}
+            - MAIL_USERNAME=${MAIL_USERNAME}
+            - MAIL_PASSWORD=${MAIL_PASSWORD}
+            - MAIL_FROM_ADDRESS=${MAIL_FROM_ADDRESS}
+            - MAIL_FROM_NAME="${APP_NAME}"
         networks:
             - dokploy-network
         healthcheck:

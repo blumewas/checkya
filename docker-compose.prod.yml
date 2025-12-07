@@ -35,7 +35,7 @@ services:
             # - APP_URL=${APP_URL}
             - APP_DEBUG=${APP_DEBUG}
             - APP_KEY=${APP_KEY}
-            - LOG_CHANNEL=stack
+            - QUEUE_CONNECTION=${QUEUE_CONNECTION:-database}
             - LOG_STACK_CHANNELS=daily,stderr
             - DB_CONNECTION=${DB_CONNECTION}
             - DB_HOST=${DB_HOST}

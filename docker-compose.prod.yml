@@ -57,17 +57,6 @@ services:
             timeout: 5s
             retries: 3
 
-    # queue:
-    #     build:
-    #         context: .
-    #         dockerfile: ./docker/php-fpm/Dockerfile
-    #         target: production
-    #     command: php artisan queue:work --tries=3
-    #     depends_on:
-    #         - php-fpm
-    # networks:
-    #     - prod
-
 networks:
     dokploy-network:
         external: true

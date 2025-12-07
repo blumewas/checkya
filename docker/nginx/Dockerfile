@@ -37,7 +37,7 @@ COPY --chown=www-data --from=builder /var/www/public /var/www/public
 WORKDIR /var/www/public
 
 # Switch to the non-privileged user to run the application
-# USER www-data
+USER www-data
 
 # Expose port 80 and start Nginx
 EXPOSE 80

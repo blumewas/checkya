@@ -12,7 +12,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'SampleApp'),
+    'name' => env('APP_NAME', 'CheckYA'),
 
     /*
     |--------------------------------------------------------------------------
@@ -72,7 +72,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | The application locale determines the default locale that will be used
-    | by SampleApp's translation / localization methods. This option can be
+    | by CheckYA's translation / localization methods. This option can be
     | set to any locale for which you plan to have translation strings.
     |
     */
@@ -88,7 +88,7 @@ return [
     | Encryption Key
     |--------------------------------------------------------------------------
     |
-    | This key is utilized by SampleApp's encryption services and should be set
+    | This key is utilized by CheckYA's encryption services and should be set
     | to a random, 32 character string to ensure that all encrypted values
     | are secure. You should do this prior to deploying the application.
     |
@@ -106,7 +106,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | These configuration options determine the driver used to determine and
-    | manage SampleApp's "maintenance mode" status. The "cache" driver will
+    | manage CheckYA's "maintenance mode" status. The "cache" driver will
     | allow maintenance mode to be controlled across multiple machines.
     |
     | Supported drivers: "file", "cache"

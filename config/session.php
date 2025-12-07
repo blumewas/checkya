@@ -9,7 +9,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | This option determines the default session driver that is utilized for
-    | incoming requests. SampleApp supports a variety of storage options to
+    | incoming requests. CheckYA supports a variety of storage options to
     | persist session data. Database storage is a great default choice.
     |
     | Supported: "file", "cookie", "database", "memcached",
@@ -42,7 +42,7 @@ return [
     |
     | This option allows you to easily specify that all of your session data
     | should be encrypted before it's stored. All encryption is performed
-    | automatically by SampleApp and you may use the session like normal.
+    | automatically by CheckYA and you may use the session like normal.
     |
     */
 

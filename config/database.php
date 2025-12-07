@@ -24,7 +24,7 @@ return [
     |
     | Below are all of the database connections defined for your application.
     | An example configuration is provided for each database system which
-    | is supported by SampleApp. You're free to add / remove connections.
+    | is supported by CheckYA. You're free to add / remove connections.
     |
     */
 

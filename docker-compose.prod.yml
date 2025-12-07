@@ -32,7 +32,7 @@ services:
             - laravel-storage-production:/var/www/storage
         environment:
             - APP_ENV=${APP_ENV:-production}
-            - APP_URL=${APP_URL}
+            # - APP_URL=${APP_URL}
             - APP_DEBUG=${APP_DEBUG}
             - APP_KEY=${APP_KEY}
             - LOG_CHANNEL=stack

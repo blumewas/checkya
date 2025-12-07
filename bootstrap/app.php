@@ -17,14 +17,15 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {})
+    ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustProxies(at: '*');
+    })
     ->withSchedule(function (Schedule $schedule): void {
-
         try {
             $suites = ApiSuite::query()
-            ->whereStatus(ApiSuiteStatusEnum::Active)
-            ->get();
-        } catch (\Throwable $th) {
+                ->whereStatus(ApiSuiteStatusEnum::Active)
+                ->get();
+        } catch (Throwable $th) {
             Log::error('Cant run schedules. Could not get api suites');
 
             return;

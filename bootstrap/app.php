@@ -33,7 +33,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $suites
             ->each(function (ApiSuite $apiSuite) use ($schedule): void {
-                $schedule->cron($apiSuite->cron_schedule)
+                // Add entry to schedule
+                $schedule->cron($apiSuite->cron_schedule->value)
                     ->call(function () use ($apiSuite): void {
                         $result = ProcessSuitePipeline::run($apiSuite);
 
